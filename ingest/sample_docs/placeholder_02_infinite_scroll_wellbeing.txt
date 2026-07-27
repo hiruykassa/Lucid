@@ -1,0 +1,24 @@
+Title: Infinite Scroll, Autoplay, and Self-Reported Digital Well-Being (placeholder)
+
+This placeholder document stands in for a real paper on persuasive design features
+and digital well-being. It exists so the ingestion pipeline can be developed and
+tested before the actual ~50-paper corpus is curated.
+
+Infinite scroll and autoplay are interface features that remove natural stopping
+cues from a browsing or viewing session. Without an explicit endpoint, such as a
+page break or an "are you still watching" prompt, users may continue consuming
+content well past their original intention. Survey-based studies have associated
+frequent exposure to these features with lower self-reported control over time
+spent on an application, though causal claims are limited by the reliance on
+cross-sectional, self-report methodology.
+
+Some platforms have introduced opt-in interventions, such as scroll-end markers,
+time-spent dashboards, or scheduled reminders, intended to restore a sense of
+stopping points. Evaluations of these interventions show mixed effectiveness,
+with usage reductions often modest and highly dependent on whether the
+intervention is opt-in or set as a default.
+
+Researchers studying digital well-being generally distinguish between design
+features that are dark patterns in the deceptive or coercive sense and features
+that are merely persuasive or attention-capturing without necessarily being
+deceptive, though the boundary between these categories is actively debated.

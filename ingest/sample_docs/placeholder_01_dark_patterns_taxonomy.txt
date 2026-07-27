@@ -1,0 +1,24 @@
+Title: A Taxonomy of Dark Patterns in User Interface Design (placeholder)
+
+Dark patterns are user interface design choices that benefit an online service by
+coercing, steering, or deceiving users into making decisions that, if fully informed
+and capable of selecting alternatives, they might not make. This placeholder document
+stands in for a real paper until the actual corpus is ingested.
+
+Researchers have proposed several taxonomies of dark patterns, commonly organized
+around mechanisms such as nagging, obstruction, sneaking, interface interference,
+forced action, and social proof manipulation. Nagging repeatedly interrupts a user's
+intended task flow with requests unrelated to that task. Obstruction makes a desired
+action, such as canceling a subscription, unreasonably difficult compared to the
+action the service prefers, such as signing up.
+
+Interface interference manipulates the user interface to privilege certain actions
+over others, for example through visual emphasis, pre-selected options, or
+confirmshaming language that guilts the user for declining an offer. Sneaking
+conceals, delays, or disguises information relevant to the user, such as hidden
+costs added at checkout. Forced action requires the user to perform a tangential
+action to complete their task, such as creating an account before viewing content.
+
+This taxonomy is widely cited in subsequent empirical work measuring the prevalence
+of dark patterns across e-commerce and mobile applications, and forms a common
+vocabulary for the digital well-being literature more broadly.

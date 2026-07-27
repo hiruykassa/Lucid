@@ -1,0 +1,23 @@
+Title: Regulatory Responses to Dark Patterns: A Comparative Overview (placeholder)
+
+This placeholder document stands in for a real paper on the regulatory landscape
+around dark patterns, included so the ingestion pipeline has more than one short
+document to chunk, embed, and index during development.
+
+Several jurisdictions have introduced rules that reference dark pattern practices
+directly or indirectly. Consumer protection frameworks in some regions prohibit
+interface designs that materially distort a consumer's ability to make a free and
+informed choice, while data protection frameworks in others require that consent
+mechanisms not be designed to nudge users toward disclosure through manipulative
+defaults or asymmetric friction between accepting and declining.
+
+Enforcement actions to date have most often targeted subscription cancellation
+flows, cookie consent banners with asymmetric accept and reject options, and
+countdown timers or low-stock indicators that misrepresent scarcity or urgency.
+Legal scholars note that defining a dark pattern in enforceable terms remains
+difficult, since many individual design choices are only manipulative in
+combination or in context, rather than in isolation.
+
+This placeholder is intentionally short. Real papers in the eventual corpus will
+be substantially longer, which is part of why chunk size and overlap need to be
+chosen deliberately rather than assumed.
