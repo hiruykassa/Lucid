@@ -94,9 +94,12 @@ separate Pandas track — Lucid's corpus is the research literature only. Siblin
 project **Ask the Early Church (ATEC)** is a live production app (React/Vite on
 Netlify, Flask on Render) with hybrid search — Voyage vector + FTS5 BM25 + title
 match, fused via reciprocal rank fusion — over ~53k patristic passages. It already
-has a working RAG feature (Claude-based synthesis with citations), built but
-disabled at launch to control API cost. Lucid is deliberately different in
-emphasis, not in what's technically possible: serverless on AWS, with generation +
-citation + a real eval harness as the core deliverable from day one.
+has a working RAG feature (a Claude-based synthesis that summarizes across
+passages), built but disabled at launch to control API cost — not the same as
+Lucid's per-answer inline citations, which is the roadmap target for ATEC's
+*future* mobile-app AI assistant, not a feature of the current synthesis build.
+Lucid is deliberately different in emphasis, not in what's technically possible:
+serverless on AWS, with generation + citation + a real eval harness as the core
+deliverable from day one.
 
 Repo: https://github.com/hiruykassa/Lucid

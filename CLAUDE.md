@@ -138,10 +138,14 @@ Pandas track** — Lucid's corpus is the research literature, not the survey dat
 project **Ask the Early Church (ATEC)** is a live production app (React/Vite on Netlify,
 Flask on Render) with hybrid search — Voyage vector + FTS5 BM25 + title match, fused via
 reciprocal rank fusion — over ~53k patristic passages. It already has a working RAG
-feature (Claude-based synthesis with citations), built but disabled at launch to control
-API cost, not because generation is out of scope for it. Lucid is deliberately different
-in emphasis, not in what's technically possible: serverless on AWS instead of a Render
-box, and generation + citation + a real eval harness (recall@k, faithfulness,
-hallucination rate) are the core deliverable here from day one, not a gated add-on.
+feature (a Claude-based synthesis that summarizes across passages), built but disabled
+at launch to control API cost, not because generation is out of scope for it. That
+current synthesis doesn't do Lucid-style per-answer inline citations — citations back to
+specific sources are the roadmap target for ATEC's *future* mobile-app AI assistant,
+which is planned to evolve from the existing synthesis, not a property it has today.
+Lucid is deliberately different in emphasis, not in what's technically possible:
+serverless on AWS instead of a Render box, and generation + citation + a real eval
+harness (recall@k, faithfulness, hallucination rate) are the core deliverable here from
+day one, not a gated add-on.
 
 Repo: https://github.com/hiruykassa/Lucid
