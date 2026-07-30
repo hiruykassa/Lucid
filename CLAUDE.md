@@ -135,7 +135,13 @@ no mobile app. Depth over breadth.
 Supports Fall 2026 faculty research **CISC 369** ("AI Dark Patterns & Digital Well-Being")
 as a literature-exploration tool. The research's **survey-data analysis is a separate
 Pandas track** — Lucid's corpus is the research literature, not the survey data. Sibling
-project **Ask the Early Church (ATEC)** is retrieval-only on Render; Lucid is deliberately
-different (adds generation + citation + eval, serverless on AWS).
+project **Ask the Early Church (ATEC)** is a live production app (React/Vite on Netlify,
+Flask on Render) with hybrid search — Voyage vector + FTS5 BM25 + title match, fused via
+reciprocal rank fusion — over ~53k patristic passages. It already has a working RAG
+feature (Claude-based synthesis with citations), built but disabled at launch to control
+API cost, not because generation is out of scope for it. Lucid is deliberately different
+in emphasis, not in what's technically possible: serverless on AWS instead of a Render
+box, and generation + citation + a real eval harness (recall@k, faithfulness,
+hallucination rate) are the core deliverable here from day one, not a gated add-on.
 
 Repo: https://github.com/hiruykassa/Lucid
