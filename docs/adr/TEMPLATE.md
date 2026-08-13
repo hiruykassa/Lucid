@@ -7,12 +7,11 @@
 
 ## Context
 
-What is true right now that forces a decision? Constraints, not preferences: budget,
-timeline, what you already know, what the grader/interviewer needs to see. Someone who
-has never seen this repo should be able to read this section and understand why a
-decision is required at all.
+What forces this decision now? Constraints, not preferences: requirements, budget,
+timeline, dependencies, scale. A reader new to the service should understand why a
+decision is required.
 
-State the constraints as numbers where you can. "Cheap" is not a constraint. "Under
+State constraints as numbers where you can. "Cheap" is not a constraint. "Under
 $15/month with no idle cost" is.
 
 ## Options considered
@@ -24,9 +23,7 @@ At least three. For each:
 - **How it works:** two sentences.
 - **Cost:** idle cost and per-query cost, with a source for each figure.
 - **Operational burden:** what breaks, who fixes it, how long to stand up.
-- **What it teaches:** does building this make you better at explaining something in an
-  interview, or is it a black box you'd be bluffing about?
-- **Why it might be wrong:** the strongest argument against, written by you, in good faith.
+- **Risks / downsides:** strongest argument against this option, in good faith.
 
 ### Option B: <name>
 
@@ -34,21 +31,19 @@ At least three. For each:
 
 ## Decision
 
-The option chosen, in one sentence, in the active voice. "We will use X."
+The option chosen, in one sentence, active voice. "We will use X."
 
-Then: why this one and not the runner-up specifically. Not "it's the best" — name the
-one factor that broke the tie.
+Why this one over the runner-up. Name the factor that broke the tie.
 
 ## Consequences
 
 **What gets easier.**
 
-**What gets harder.** This section is the one that shows seniority. Every decision costs
-something. If you cannot name what this makes worse, you have not finished thinking.
+**What gets harder.** Every decision costs something — name it.
 
-**What we are now locked into,** and how expensive the escape hatch is.
+**What we are locked into,** and how expensive it is to reverse.
 
 ## Revisit if
 
-The concrete signal that would make us reopen this. A number, a date, or an event —
+The concrete signal that would reopen this: a number, a date, or an event —
 not "if it stops working well."
