@@ -23,9 +23,10 @@ It is a record of *why the system is not something else*.
 | [0002](0002-bedrock-models.md) | Embedding + generation models | **Accepted** (invoke gate open; case 178659049300631) | Ingest, generation, cost model |
 | [0003](0003-corpus-selection.md) | Which papers, and under what license | **Accepted** | Everything downstream of ingest |
 
-**S1 gate (from `docs/PLAN.md`):** three **Accepted** ADRs + billing alarm **test-fired**
-(independent of Bedrock). Bedrock invoke smokes remain open on case 178659049300631;
-S2 skeleton does not need Bedrock.
+**S1 gate (from `docs/PLAN.md`):** **met** 2026-08-14. Three **Accepted** ADRs + billing
+alarm test-fired (SNS `lucid-billing-alarms`, CloudWatch delivery 2026-08-13 15:13 UTC;
+budget `My Monthly Cost Budget` $20/month). Bedrock invoke smokes remain open on case
+178659049300631; S2 skeleton does not need Bedrock.
 
 ## How a review goes
 

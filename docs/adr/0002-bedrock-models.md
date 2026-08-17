@@ -63,10 +63,12 @@ succeed.
   - `amazon.nova-lite-v1:0`
 3. Log **date**, API exception, HTTP status, and `x-amzn-RequestId` per ID below.
 
-**Billing alarm (S1 — independent of Bedrock):** test-fire the account billing
-alarm **before** first Bedrock spend — set threshold at a value already crossed,
-or publish directly to the SNS topic, and confirm notification lands in inbox.
-An alarm nobody has seen fire is not an alarm.
+**Billing alarm (S1 — independent of Bedrock):** **done** 2026-08-13. Account budget
+`My Monthly Cost Budget` is $20/month (whole-account, shared with other work on
+`562280272865`). Alerts at 85% actual, 100% actual, 100% forecasted go to email and
+SNS topic `arn:aws:sns:us-east-2:562280272865:lucid-billing-alarms`. Test publish:
+CloudWatch `NumberOfMessagesPublished` = 1, `NumberOfNotificationsDelivered` = 2,
+`NumberOfNotificationsFailed` = 0 at 2026-08-13 15:13 UTC.
 
 
 | ID                                            | Date       | Exception             | HTTP    | RequestId                              | Note                                                                                                                                                                                                                                                                                  |
