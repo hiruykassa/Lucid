@@ -66,3 +66,6 @@ Short. Two or three alternatives inside the component, and why not.
 
 Things you want the reviewer to weigh in on. Bring these to review explicitly rather
 than guessing and hoping nobody notices.
+
+- What lives in `samconfig.toml` vs. what CI passes as parameter overrides, and where
+  the deployment role ARN comes from. Raised 2026-08-17 after a gitignore near-miss.
