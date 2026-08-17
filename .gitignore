@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+*.egg-info/
+
+# AWS SAM
+.aws-sam/
+samconfig.toml
+
+# Secrets
+.env
+*.pem
+
+# macOS / editors
+.DS_Store
+.idea/
