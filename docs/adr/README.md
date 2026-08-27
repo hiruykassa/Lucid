@@ -21,7 +21,8 @@ It is a record of *why the system is not something else*.
 |---|---|---|---|
 | [0001](0001-vector-store.md) | Vector store | **Accepted** | All ingest and retrieval work |
 | [0002](0002-bedrock-models.md) | Embedding + generation models | **Accepted** (invoke verified 2026-08-21) | Ingest, generation, cost model |
-| [0003](0003-corpus-selection.md) | Which papers, and under what license | **Accepted** | Everything downstream of ingest |
+| [0003](0003-corpus-selection.md) | Which papers, and under what license | **Accepted** (sizing superseded by 0004) | Everything downstream of ingest |
+| [0004](0004-corpus-eval-resizing.md) | Corpus and eval set sizing under measured capacity | **Draft** — awaiting Hiruy's review | S3 collection, S6 eval set |
 
 **S1 gate (from `docs/PLAN.md`):** **met** 2026-08-14. Three **Accepted** ADRs + billing
 alarm test-fired (SNS `lucid-billing-alarms`, CloudWatch delivery 2026-08-13 15:13 UTC;

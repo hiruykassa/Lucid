@@ -61,10 +61,10 @@ Two weeks each, Monday to Sunday. Nine of them.
 | ------ | --------------- | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **S1** | Aug 10 – Aug 23 | Decide                   | ADRs 0001, 0002, 0003 all **Accepted**. AWS account has a billing alarm that has actually fired a test notification.                                                   |
 | **S2** | Aug 24 – Sep 6  | Deploy an empty skeleton | A public URL returns hardcoded cited-answer JSON. Shipped by SAM, through GitHub Actions, logging to CloudWatch. One alarm, one runbook entry. LLD-0001 approved 2026-08-21. |
-| **S3** | Sep 7 – Sep 20  | Corpus + chunking        | **25–30** papers in S3 per ADR-0003 (revised down from 40–50). Chunker written by you, LLD approved first. You can explain the chunk size out loud without notes.      |
+| **S3** | Sep 7 – Sep 20  | Corpus + chunking        | **25–30** papers in S3 per ADR-0004, inclusion rule per ADR-0003. Chunker written by you, LLD approved first — must preserve **page numbers** (LLD-0001 citation shape). You can explain the chunk size out loud without notes. |
 | **S4** | Sep 21 – Oct 4  | Embeddings + index       | Every chunk embedded via Bedrock and indexed. You can run a query by hand and eyeball that the top-5 are relevant.                                                     |
 | **S5** | Oct 5 – Oct 18  | Answer path + eval v0    | Endpoint returns a cited answer or refuses. **Plus a 5-question smoke eval that prints a recall number.** See the risk section.                                        |
-| **S6** | Oct 19 – Nov 1  | Real eval set            | **~35** labeled questions built under the independence protocol from ADR-0003 (revised down from ~50). recall@k implemented properly. Report n alongside every metric. |
+| **S6** | Oct 19 – Nov 1  | Real eval set            | **~35** labeled questions (~26 answerable, ~9 unanswerable) per ADR-0004, built under ADR-0003's independence protocol. recall@k implemented properly. Report n alongside every metric. |
 | **S7** | Nov 2 – Nov 15  | **Baseline measured**    | Faithfulness, hallucination rate, p50/p95, cost per query — all real, all in `docs/journal/` with date, command, and SHA.                                              |
 | **S8** | Nov 16 – Nov 29 | Improve, re-measure      | One change (reranking *or* a stricter grounding prompt, not both). Re-run. Before/after delta recorded. Thanksgiving is Nov 26 — this sprint is effectively 1.5 weeks. |
 | **S9** | Nov 30 – Dec 13 | Operate + write up       | Alarms and runbooks complete. At least one real COE. README results table with measured numbers. Done.                                                                 |
@@ -85,8 +85,12 @@ optimistic end of an estimate. Estimated cost of the current scope is **110–14
 
 | What | Was | Now | Why |
 | --- | --- | --- | --- |
-| Corpus size | 40–50 papers | **25–30** | Collection and license-checking is the slowest non-code work in the project and buys the least. Retrieval over 25 papers is still non-trivial. Supersede ADR-0003. |
-| Eval set | ~50 questions | **~35** | Hand-labeling ground truth is slower than writing the harness that consumes it. Keeps the 15–20% unanswerable slice. Wider error bars, stated honestly, not hidden. |
+| Corpus size | 40–50 papers | **25–30** | Collection and license-checking is the slowest non-code work in the project and buys the least. Retrieval over 25 papers is still non-trivial. |
+| Eval set | ~50 questions | **~35** | Hand-labeling ground truth is slower than writing the harness that consumes it. Wider error bars, stated honestly, not hidden. |
+| Unanswerable slice | ~15–20% (~8–10 Q) | **~25% (~9 Q)** | Refusal is the differentiator and already had the smallest denominator. A proportional cut would put it at 5–7 Q, where one misclassification moves the number 16.7 pp. Take the loss on the answerable slice instead. |
+
+Recorded in **[ADR-0004](adr/0004-corpus-eval-resizing.md)**, which supersedes
+ADR-0003's sizing only. Error-bar arithmetic is in that ADR.
 | S8 improve + re-measure | at risk | **kept** | The before/after delta is worth more than a larger corpus. Affordable at 135.5 h. |
 
 **What did not get cut:** the deployed endpoint, the alarm, the runbook, the COE, the
