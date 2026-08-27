@@ -6,8 +6,10 @@ file is the calendar.
 - **Start:** Mon Aug 10, 2026
 - **Ship by:** Sun Dec 13, 2026
 - **Hard stop:** Sun Dec 20, 2026
-- **Commitment:** **9.5 h/week** in fixed calendar blocks (see *Capacity*, below)
-- **Budget:** **135.5 h** from Aug 27 to Dec 13. Measured, not estimated.
+- **Commitment:** **11 h/week** in fixed calendar blocks — 9.5 h building, 1.5 h Friday
+  journal and close-out (see *Capacity*, below)
+- **Budget:** **135.5 h of build time** from Aug 27 to Dec 13 (158 h including the
+  Friday ritual). Measured, not estimated.
 
 > **Replanned 2026-08-27.** The original figures here — "~20 h/week", "~360 h nominal,
 > plan against ~300 h" — were guesses written before the semester schedule existed. They
@@ -35,7 +37,14 @@ is an event that exists on the calendar, not an intention.
 | Thu 5:00–6:00pm — small tasks | 1.0 h | 13 | 13.0 |
 | Sat 11:00am–3:00pm — **deep work** | 4.0 h | 13 | 52.0 |
 | S2 catch-up, Aug 29 – Sep 5 (one-off) | — | 4 | 12.0 |
-| | | **Total** | **135.5** |
+| | | **Build subtotal** | **135.5** |
+| Fri 3:00–4:30pm — journal + week close-out | 1.5 h | 15 | 22.5 |
+| | | **Total** | **158.0** |
+
+**Build hours and ritual hours are counted separately on purpose.** The 135.5 h figure
+is what's available to actually build the thing; scope estimates are sized against that
+number, not against 158. The Friday block is overhead, and overhead that gets quietly
+counted as capacity is how a plan overruns without anyone noticing.
 
 Thanksgiving week drops the Wed, Thu, and Sat blocks. Finals week (Dec 14–20) has none.
 
@@ -179,7 +188,7 @@ Flagging this in advance so that when I say it in October you've already agreed 
 | Sprint kickoff (alternate Mondays) | Break the sprint into tickets, agree the gate           |
 | Before any new component           | LLD or ADR, reviewed, before code                       |
 | Before any merge                   | PR + sleep on it + cold self-review + my review         |
-| Every Friday, 10 min               | STAR journal entry, with hours logged                   |
+| **Every Friday, 3:00–4:30pm**      | STAR journal entry + week close-out, with hours logged  |
 | Sprint close (alternate Sundays)   | Gate met or not — binary. Retro if not.                 |
 
 

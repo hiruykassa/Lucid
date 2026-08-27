@@ -100,7 +100,7 @@ semester" out loud when it applies.
 | Before any new component | Design doc, reviewed | `docs/adr/` or `docs/design/` |
 | Before any merge | PR description + cold self-review + Claude review | GitHub PR |
 | When something breaks | Triage → fix → COE with five whys | `docs/coe/` |
-| Every Friday, 10 minutes | STAR journal entry | `docs/journal/` |
+| Every Friday, 3:00–4:30pm | STAR journal entry + week close-out | `docs/journal/` |
 | End of a phase | Retro: what did the numbers actually say? | journal entry |
 
 The Friday journal is the highest effort-to-payoff item here and the easiest to skip.
