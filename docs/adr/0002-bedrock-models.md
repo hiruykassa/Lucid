@@ -1,6 +1,6 @@
 # ADR-0002: Embedding and generation models
 
-- **Status:** Accepted (model decision) — invoke access blocked, tracked via Support case 178659049300631 + Sep 5 Plan B trigger
+- **Status:** Accepted — invoke access verified 2026-08-21 (Support case 178659049300631 closed)
 - **Date:** 2026-08-10 (accepted 2026-08-13)
 - **Author:** Hiruy Kassa
 - **Reviewer:** Claude (Senior SDE)
@@ -51,10 +51,11 @@ page alone):
 | Judge    | Nova Lite                | `amazon.nova-lite-v1:0`                                                                                                                     | Serverless; listed in catalog                                                                                                                                                                                                |
 
 
-**Catalog visibility ≠ invoke access.** S1 is not done until the invoke smokes below
-succeed.
+**Catalog visibility ≠ invoke access.** The table below is the access gate. Failed
+rows from August are kept. The gate **closed 2026-08-21** when all three IDs
+returned HTTP 200.
 
-### S1 access gate (Waiting on response from AWS support)
+### S1 access gate (**met** 2026-08-21)
 
 1. Submit Anthropic **use case details** in the Bedrock console (one-time).
 2. Smoke-invoke each ID from `us-east-2` (tiny prompt / one-token-class call):
@@ -77,6 +78,9 @@ CloudWatch `NumberOfMessagesPublished` = 1, `NumberOfNotificationsDelivered` = 2
 | `amazon.titan-embed-text-v2:0`                | 2026-08-12 | `ValidationException` | **400** | `243ec4e8-75e1-453d-952c-2a66cb39c493` | `InvokeModel`. Same Error 002 message.                                                                                                                                                                                                                                                |
 | `amazon.nova-lite-v1:0`                       | 2026-08-12 | `ValidationException` | **400** | `1bea0fa4-397d-4c9c-a9c4-b1364909868c` | `Converse` + Playground. `get-foundation-model-availability` was AUTHORIZED/AVAILABLE; invoke still blocked. Captured with `aws … --debug`.                                                                                                                                           |
 | `amazon.nova-lite-v1:0`                       | 2026-08-13 | `ValidationException` | **400** | *(not captured)*                       | Retest after payment fix (USD currency, Visa default, backup ACH). Same Error 002 body.                                                                                                                                                                                               |
+| `us.anthropic.claude-haiku-4-5-20251001-v1:0` | 2026-08-21 | —                     | **200** | `d83f643d-4729-4e75-bf10-71d2aef2da76` | `Converse` from `us-east-2`, `maxTokens=1`. Account `562280272865`, identity `hiruy-admin`. Command: boto3 `bedrock-runtime.converse`.                                                                                                                                                |
+| `amazon.titan-embed-text-v2:0`                | 2026-08-21 | —                     | **200** | `11252e9c-9669-47a1-b926-c38e8d618ef5` | `InvokeModel`. Embedding length **1024** (matches this ADR’s dim choice).                                                                                                                                                                                                              |
+| `amazon.nova-lite-v1:0`                       | 2026-08-21 | —                     | **200** | `8bf5ccc9-54b2-4127-bc79-5cdaf687d6c4` | `Converse`, `maxTokens=1`.                                                                                                                                                                                                                                                             |
 
 
 
@@ -90,16 +94,19 @@ CloudWatch `NumberOfMessagesPublished` = 1, `NumberOfNotificationsDelivered` = 2
 | 2026-08-13 | Automated recommendation: payment **authorization** failure (generic card message). Default was ACH ****1792; payment currency was unset. |
 | 2026-08-13 | **Peter (Support):** valid payment on file, models AVAILABLE — **internal review** initiated. Case status: **Pending amazon action**.     |
 | 2026-08-13 | Remediation: currency → **USD**; default → **Visa ****9061**; backup **ACH ****1792** enabled. Nova retest still Error 002.               |
+| 2026-08-21 | Case **closed**. Hiruy: Support accepted / entitlement unblocked. Three smokes HTTP 200 the same day (RequestIds in the table above).     |
 
 
-**Working theory:** account-level Bedrock block pending AWS internal review (and/or payment authorization retry). Not IAM, not per-model enablement, not wrong model IDs. Plan B schedule unchanged (drop-dead **Sep 5, 2026**).
+**Working theory (closed):** account-level Bedrock block (Error 002), not IAM and not
+wrong model IDs. Cleared after Support internal review + payment remediation. Plan B
+was **not** executed.
 
-**S1 status:** **Accepted** (model decision). **Invoke access** on account
-`562280272865` remains blocked (`ValidationException` / HTTP 400 / Error 002 body)
-and tracked via Support case **178659049300631** + the schedule/Plan B section. Do not
-treat catalog visibility as a closed access gate.
+**S1 status:** **Accepted** (model decision **and** invoke gate). Account
+`562280272865` can call all three decided IDs from `us-east-2` as of 2026-08-21.
+S2 still does not *need* Bedrock; S3+ can use this account without waiting on
+entitlement.
 
-### Pre-Support checks (run while case is open)
+### Pre-Support checks (historical — run while the case was open)
 
 Error 002 on **Amazon's own** Titan and Nova confirms an **account-level** block
 (not per-model enablement — Bedrock auto-enables serverless models since Oct 2025).
@@ -122,7 +129,7 @@ Log results in the smoke table notes or journal.
 | Org SCP               | **Pending** — run `aws organizations describe-organization`                                       |
 | us-east-1 Nova smoke  | **Pending**                                                                                       |
 | Billing verified      | **Partial** — USD + Visa default + backup ACH; ~$6.03 spend in `us-east-2`; Bedrock still blocked |
-| t3.micro verification | **Pending**                                                                                       |
+| t3.micro verification | **Pending** (never needed — smokes passed 2026-08-21 on `us-east-2`)                              |
 
 
 
@@ -132,25 +139,24 @@ Log results in the smoke table notes or journal.
 
 | Sprint                  | Needs Bedrock?                                               |
 | ----------------------- | ------------------------------------------------------------ |
-| **S2** (Aug 24 – Sep 6) | **No** — hardcoded JSON skeleton. Safe to run while blocked. |
+| **S2** (Aug 24 – Sep 6) | **No** — hardcoded JSON skeleton. Does not need Bedrock. |
 | **S3** (Sep 7 – Sep 20) | **Yes** — corpus ingest path leads to embed.                 |
 | **S4+**                 | **Yes** — embed, generate, judge.                            |
 
 
-**Primary path:** keep case **178659049300631** active. Check for a Support reply **twice per week** (Mon/Thu). If there is **no meaningful reply by Fri Aug 29, 2026**, reply on the case asking for escalation / Bedrock entitlement review — do not wait silently until drop-dead.
+**Primary path (closed):** case **178659049300631** is closed. No twice-weekly Support check. If Error 002 returns, open a new case and treat Plan B below as live again.
 
-**Drop-dead:** **Fri Sep 5, 2026** (last weekday of S2, two calendar days before S3).  
-That morning: re-run the three smokes on account `562280272865`. If any still returns `ValidationException` / HTTP 400 / Error 002 body, **execute Plan B the same day**. Do not start S3 on a hope that Support clears mid-sprint.
+**Drop-dead (unused):** **Fri Sep 5, 2026** was the trigger to execute Plan B if smokes still failed. Invoke gate met **2026-08-21**, so do not open a second account on that date unless access has **regressed**.
 
-**Plan B (senior default if still blocked on Sep 5):** open a **second personal AWS account**, attach a payment method, re-run S1 catalog + invoke smokes there the same day, and move Lucid’s Bedrock / Lambda / S3 to that account (prefer `us-east-2` if invokes work; otherwise the region where smokes pass). Update ADR-0001 / 0002 / 0003 account+region notes (or a short superseding note). Leave case **178659049300631** open on the original account as a parallel recovery path — do not abandon it.
+**Plan B (unused — keep if Error 002 returns):** open a **second personal AWS account**, attach a payment method, re-run catalog + invoke smokes the same day, and move Lucid’s Bedrock / Lambda / S3 to that account (prefer `us-east-2` if invokes work; otherwise the region where smokes pass). Update ADR-0001 / 0002 / 0003 account+region notes (or a short superseding note).
 
 **Why this Plan B (and not the tempting ones):**
 
-- **Not “embed locally in the zip Lambda.”** Ingest can be offline and the FAISS index can still ship in the package (ADR-0001). Query-time embedding must use the **same** model as ingest. A local embed stack (torch / sentence-transformers) in a **zip** Lambda blows the **250 MB** ceiling already measured. Generation + judge are **also** blocked by Error 002 today, so local-embed-only does not unblock S3/S4.
+- **Not “embed locally in the zip Lambda.”** Ingest can be offline and the FAISS index can still ship in the package (ADR-0001). Query-time embedding must use the **same** model as ingest. A local embed stack (torch / sentence-transformers) in a **zip** Lambda blows the **250 MB** ceiling already measured. While Error 002 was active, generation + judge were **also** blocked, so local-embed-only would not have unblocked S3/S4.
 - **Not “slip S3 with no date.”** Calendar risk without a trigger is how December arrives with no baseline.
 - **Not “switch to a non-Bedrock API mid-semester” as first escape.** That rewrites ADR-0002 under deadline. A second AWS account preserves the decided Bedrock shape with one afternoon of account bootstrap + smoke re-verify.
 
-**Success criterion to leave Plan B unused:** all three smoke rows show a successful invoke (not `ValidationException`) on the project account before Sep 5 EOD.
+**Success criterion to leave Plan B unused:** all three smoke rows show a successful invoke (not `ValidationException`) on the project account before Sep 5 EOD. **Met 2026-08-21** (HTTP 200 RequestIds in the smoke table).
 
 ### Cost worksheet assumptions (labeled, not measured)
 
@@ -424,8 +430,6 @@ discipline as ADR-0001’s cold-start threshold — acknowledge now, measure lat
 - Nova Lite-as-judge may be noisy; early faithfulness is not gospel.
 - Cost worksheet is coupled to an undecided S3 chunk size.
 - Locked to Titan V2 vector space until we pay a full re-embed.
-- Account currently cannot invoke Bedrock (`ValidationException` / Error 002);
-managed via Support case + Sep 5 Plan B above.
 
 **What we are locked into,** and how expensive it is to reverse.
 
@@ -456,6 +460,7 @@ cross-family judge is needed, **or**
 - One 50-question harness pass exceeds **$0.50** in Bedrock tokens, **or**
 cumulative Bedrock **eval** token spend approaches the **~$5** semester
 ceiling (re-price from the AWS page and reassess Sonnet / Micro), **or**
-- Drop-dead **Sep 5, 2026** smokes still fail → execute Plan B (second AWS
-account) the same day.
+- Invoke access regresses to Error 002 / HTTP 400 on the three decided IDs →
+reopen Support and execute Plan B (second AWS account) the same day, not wait
+for a silent calendar.
 

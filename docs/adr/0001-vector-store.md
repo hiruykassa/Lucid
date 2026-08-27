@@ -192,8 +192,8 @@ probe: **512, 1024, 1769, 3008 MB** (1769 MB ≈ one vCPU per AWS docs).
 
 ### Cold-start measurement (S1 — no Bedrock required)
 
-While Bedrock invoke is blocked (ADR-0002), this is the largest open risk in this
-ADR and **can be measured now**:
+Bedrock invoke is verified (ADR-0002, 2026-08-21). This measurement still does
+**not** need Bedrock and remains the largest open packaging risk in this ADR:
 
 1. Deploy a throwaway Lambda in `us-east-2` with the measured `faiss-cpu` +
   `numpy` package (same pins as above).
