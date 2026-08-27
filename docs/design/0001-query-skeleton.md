@@ -1,71 +1,139 @@
 # LLD: Query skeleton (S2)
 
-- **Status:** Draft
+- **Status:** Approved (reviewed 2026-08-21)
 - **Date:** 2026-08-17
 - **Author:** Hiruy Kassa
 - **Reviewer:** Claude (Senior SDE)
 - **Related:** ADR-0001, ADR-0002
 
-> A low-level design doc describes *how one component works* before it exists. An ADR
-> chooses between technologies; an LLD designs the thing you chose. If you're about to
-> write a component and you can't fill this in, you don't understand it well enough to
-> write it yet — and that's the point of catching it here rather than at line 200.
-
 ## Problem
 
-What this component is for, in the reader's terms, not yours. Two paragraphs maximum.
+Lucid has no public query URL yet. Until one exists, a later failure could be a dead
+deploy, silent logs, or a bad retrieval or model call, and we would not be able to tell
+those apart. S5 is when the real answer path lands; if that is also the first time the
+HTTP contract and the AWS pipe exist, the first outage is every layer at once.
+
+This component is the empty query skeleton: a public URL (API Gateway in front of
+Lambda) that returns hardcoded cited-answer JSON in the shape the real system will
+keep. It is deployed with SAM through GitHub Actions, with CloudWatch logs. Retrieval,
+embeddings, and Bedrock are out of scope. The fake body is only so the pipe has a
+stable response to return while we learn whether the service is even up.
 
 ## Requirements
 
-**Functional.** What it must do. Numbered, testable, each one something you could write
-a failing test for today.
+**Functional.**
 
-**Non-functional.** Latency budget, cost ceiling, failure tolerance. Numbers.
+1. Hitting the public URL returns hardcoded cited-answer JSON.
+2. A GitHub push runs the SAM recipe (GitHub Actions) so we do not have to deploy by hand.
+3. After a call, we can find a log line from that call in CloudWatch.
+4. There is one alarm that means the query URL is failing (not the S1 billing alarm).
+5. There is one runbook for what to do when that alarm fires.
 
-**Explicit non-requirements.** What this component deliberately does not handle, so a
-reviewer doesn't waste time asking about it.
+**Non-functional.**
+
+- Latency: TARGET (unmeasured). I will fill this after the first deploy.
+- Cost: TARGET (unmeasured). No Bedrock on this path.
+
+**Explicit non-requirements.**
+
+- Retrieval, embeddings, and Bedrock
+- No real citations from papers (fixtures only)
+- No eval, no UI, no login
+
+
 
 ## Interface
 
-The contract, before the implementation. Function signatures or the API shape: inputs,
-outputs, error cases. Someone should be able to write a caller against this section
-alone.
+```
+POST /query
 
+Request:
+{
+  "question": "What is the effect of AI in the human brain?"
+}
+
+Request body is ignored in S2. Empty body is still 200 + the same JSON.
+
+Success(HTTP 200):
+{
+  "refused": false,
+  "answer": "Hardcoded fixture. Not from the corpus.",
+  "citations": [
+     { "paper_id": "fixture-1", "page": "page 3" }
+   ]
+}
+
+Refusal (HTTP 200):
+{
+  "refused": true,
+  "answer": "{query} not supported.",
+  "citations": []
+}
+
+
+Errors:
+- 5xx: our side failed (Lambda/API Gateway). Caller gets no reliable body.
 ```
-# signature / request / response shape
-```
+
+**Citations:** 
+
+- **paper_id -** the paper where the information came from
+- **page -** tha page of the paper where we used to answer the query.
+
+**HTTP:**
+
+- **Refusal -** chose 200 because the query will pass even when no answer is found for it.
 
 ## Design
 
-How it works. A diagram if the data flow is non-obvious.
+**1. Flow**
 
-Then the part that matters: **the decisions inside the component.** Chunk size. Overlap.
-Top-k. Timeout values. Retry policy. Each one gets a sentence on why that value and not
-the neighbouring one. "512 tokens" is a magic number; "512 tokens, because the abstracts
-in this corpus run 200–400 and I want one whole abstract per chunk" is a design.
+Caller → API Gateway (`POST /query`) → Lambda → returns the Success JSON from Interface → CloudWatch gets a log line.
+
+No retrieval box. No Bedrock box.
+
+**2. Decisions**
+
+- **Handler:** Python function that returns the Interface Success JSON as a constant (does not read `question` in S2). Why: hardcoded gate.
+- **Timeout:** 10 seconds. Why: fake JSON should return immediately; if we wait that long, treat it as hung.
+- **What SAM creates:** Lambda + the HTTP API in front of it + logs. Why: that is the public URL.
+
+
 
 ## Failure modes
 
-| What breaks | How you find out | What you do about it |
-|---|---|---|
-| | | |
 
-Every row here should end up in a runbook entry and, where it matters, an alarm. If the
-"how you find out" column says "a user tells me," that's a gap, not an answer.
+| What breaks                                                 | How you find out                          | What you do about it                                            |
+| ----------------------------------------------------------- | ----------------------------------------- | --------------------------------------------------------------- |
+| Lambda / API returns 5xx (handler crash or Gateway failure) | query URL alarm                           | CloudWatch log line, then last GitHub deploy                    |
+| GitHub Actions deploy fails (live URL is old or missing)    | red X on the workflow, not the 5xx alarm. | open the Actions log                                            |
+| No log line after a call that you think succeeded           | you look; that is a gap to notice         | confirm you hit the live URL, confirm SAM created the log group |
+
+
+
 
 ## Testing
 
-What gets a unit test, what needs an integration test, and what you're choosing not to
-test and why. Name the one test that would actually catch a regression here.
+**Unit.** Laptop only, no AWS. Call the handler (or the function that builds the Success dict) and assert the JSON matches Interface: `answer`, `citations` with `paper_id` and `page`. Assert two different `question` values (or empty body) still produce the same bytes.
+
+**Integration.** After deploy: `curl POST /query` on the public URL, expect HTTP 200 and that same JSON. This is the test that the door is wired, not only the Python. Not runnable until SAM has created the URL.
+
+**Skip.** No Bedrock, retrieval, or “is the chunk found in the page.” No TLS tests. Unit tests must not need an AWS account.
+
+**The one regression test:** unit test that handler JSON equals the Interface Success example (keys and fixture values). If someone deletes `citations`, this fails.
 
 ## What I considered and rejected
 
-Short. Two or three alternatives inside the component, and why not.
+- **GET /query instead of POST.** GET would work for a body we ignore, but S5 needs a question in the body. Freezing POST now means callers do not change method later.
+- **Click the console instead of SAM.** Faster once, then the live pipe is not in git and S5 cannot reproduce it. Rejected; recipe is the source of truth.
+- **Return plain text or HTML.** The product contract is cited-answer JSON. A string 200 would not catch shape drift before S5.
+
+
 
 ## Open questions
 
-Things you want the reviewer to weigh in on. Bring these to review explicitly rather
-than guessing and hoping nobody notices.
-
 - What lives in `samconfig.toml` vs. what CI passes as parameter overrides, and where
-  the deployment role ARN comes from. Raised 2026-08-17 after a gitignore near-miss.
+the deployment role ARN comes from. Raised 2026-08-17 after a gitignore near-miss.
+- Exact CloudWatch metric and threshold for the query-URL alarm (5xx count vs Lambda errors). Failure modes names the alarm; the number waits until the first deploy.
+- Chunker has to remember tha page it got its information from.
+
