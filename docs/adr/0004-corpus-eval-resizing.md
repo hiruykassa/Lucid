@@ -15,11 +15,11 @@ The operating contract says Hiruy drafts ADRs and Claude reviews them. This one 
 inverted, at his request, so the repo isn't left self-contradicting between sessions.
 Two consequences:
 
-1. **Status stays** `Draft` **until Hiruy has read it and said it's right.** He is the
-  reviewer here, not me. If he disagrees with any number below, it changes.
+1. **Reviewed and Approved by Hiruy on 2026-08-27.** He was the reviewer on this one,
+   not Claude — an author cannot accept their own ADR.
 2. He must be able to defend these numbers in an interview without notes. If he can't
-  explain why 25–30 and not 45, this ADR has failed regardless of whether the
-   reasoning is sound.
+   explain why 25–30 and not 45, this ADR has failed regardless of whether the
+   reasoning is sound. **Approving it is the claim that he can.**
 
 ---
 
