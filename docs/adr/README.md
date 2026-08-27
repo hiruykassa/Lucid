@@ -13,14 +13,21 @@ It is a record of *why the system is not something else*.
 - Written *before* the code, not after. An ADR written after implementation is a
   justification, and everyone can tell.
 - Hiruy drafts. Claude reviews. The review will focus on the options dismissed fastest.
+- **Only the reviewer flips Status to Accepted.** Do not self-accept.
 
 ## The backlog
 
 | ADR | Decision | Status | Blocks |
 |---|---|---|---|
-| [0001](0001-vector-store.md) | Vector store | Not started | All ingest and retrieval work |
-| [0002](0002-bedrock-models.md) | Embedding + generation models | Not started | Ingest, generation, cost model |
-| [0003](0003-corpus-selection.md) | Which papers, and under what license | Not started | Everything downstream of ingest |
+| [0001](0001-vector-store.md) | Vector store | **Accepted** | All ingest and retrieval work |
+| [0002](0002-bedrock-models.md) | Embedding + generation models | **Accepted** (invoke verified 2026-08-21) | Ingest, generation, cost model |
+| [0003](0003-corpus-selection.md) | Which papers, and under what license | **Accepted** | Everything downstream of ingest |
+
+**S1 gate (from `docs/PLAN.md`):** **met** 2026-08-14. Three **Accepted** ADRs + billing
+alarm test-fired (SNS `lucid-billing-alarms`, CloudWatch delivery 2026-08-13 15:13 UTC;
+budget `My Monthly Cost Budget` $20/month). Bedrock invoke smokes **passed** 2026-08-21
+(case 178659049300631 closed; RequestIds in ADR-0002). S2 skeleton still does not
+need Bedrock.
 
 ## How a review goes
 
