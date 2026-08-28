@@ -24,6 +24,11 @@ Constraints:
 - Region: `us-east-2` (account / console region), on-demand Bedrock, no
 Provisioned Throughput, no quota request that can block December.
 - Corpus scale: ~50 papers → embed cost is noise; **eval re-runs** dominate spend.
+  *(ADR-0004 lowered the target to 25–30 papers and ~35 eval questions on 2026-08-27.
+  Every cost figure in this ADR was computed at ~50 papers / ~50 questions and is
+  therefore an over-estimate. Left as-is deliberately: a conservative budget is the
+  safe direction to be wrong in, and re-deriving the worksheet buys nothing. Re-price
+  from the AWS page before quoting any of these as actuals.)*
 - Budget posture matches ADR-0001: keep always-on near $0; pay per token only.
 - Must support a grounded refuse path — cheapest model that ignores instructions
 fails the product even if the eval bill looks great.

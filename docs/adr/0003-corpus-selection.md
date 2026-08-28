@@ -1,9 +1,18 @@
 # ADR-0003: Corpus selection and licensing
 
-- **Status:** Accepted
+- **Status:** Accepted — **sizing superseded by [ADR-0004](0004-corpus-eval-resizing.md)** (2026-08-27)
 - **Date:** 2026-08-10 (accepted 2026-08-13)
 - **Author:** Hiruy Kassa
 - **Reviewer:** Claude (Senior SDE)
+
+> **Read ADR-0004 before acting on any number in this document.** The corpus target
+> (40–50 papers) and eval set size (~50 questions) below were sized against an
+> unmeasured capacity assumption that turned out to be wrong by roughly 2×. Current
+> targets are **25–30 papers** and **~35 questions** with a **~25%** unanswerable
+> slice. Everything else here — inclusion rule, licensing, S3 layout, manifest and
+> hash discipline, corpus versioning, the independence protocol, the rejected-paper
+> sourcing trap, and the refusal labels — stands unchanged and is still the
+> authority.
 
 ## Context
 
@@ -242,6 +251,10 @@ trap is real.
 re-label (or keeping eval paired only to the old version).
 - Escape hatch: shrink to ~25 only if collection blocks S3; expand past 50 only if
 measured recall is saturated and FAISS size still fits Lambda (revisit ADR-0001).
+**Update 2026-08-27:** the shrink was taken, but *not* through this hatch — collection
+was never blocked. Capacity was measured short before S3 started, which is a different
+trigger, so it went through [ADR-0004](0004-corpus-eval-resizing.md) rather than being
+applied silently here.
 
 ---
 
