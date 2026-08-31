@@ -6,10 +6,10 @@ file is the calendar.
 - **Start:** Mon Aug 10, 2026
 - **Ship by:** Sun Dec 13, 2026
 - **Hard stop:** Sun Dec 20, 2026
-- **Commitment:** **11 h/week** in fixed calendar blocks — 9.5 h building, 1.5 h Friday
+- **Commitment:** **9 h/week** in fixed calendar blocks — 7.5 h building, 1.5 h Friday
   journal and close-out (see *Capacity*, below)
-- **Budget:** **135.5 h of build time** from Aug 27 to Dec 13 (158 h including the
-  Friday ritual). Measured, not estimated.
+- **Budget:** **105.5 h of build time** from Aug 31 to Dec 13 (126.5 h including the
+  Friday ritual). Measured 2026-08-31, not estimated.
 
 > **Replanned 2026-08-27.** The original figures here — "~20 h/week", "~360 h nominal,
 > plan against ~300 h" — were guesses written before the semester schedule existed. They
@@ -24,10 +24,10 @@ date below as if Dec 20 doesn't exist.
 
 
 
-## Capacity — measured 2026-08-27
+## Capacity — recounted 2026-08-31
 
-Counted from Google Calendar on 2026-08-27, covering Aug 27 – Dec 13. Every figure below
-is an event that exists on the calendar, not an intention.
+Counted from Google Calendar on **2026-08-31**, covering Aug 31 – Dec 13. Every figure
+below is an event that exists on the calendar, not an intention.
 
 | Block | Duration | Occurrences | Hours |
 | --- | --- | --- | --- |
@@ -35,24 +35,42 @@ is an event that exists on the calendar, not an intention.
 | Tue 5:00–6:00pm — small tasks | 1.0 h | 13 | 13.0 |
 | Wed 6:00–8:00pm — build | 2.0 h | 13 | 26.0 |
 | Thu 5:00–6:00pm — small tasks | 1.0 h | 13 | 13.0 |
-| Sat 11:00am–3:00pm — **deep work** | 4.0 h | 13 | 52.0 |
-| S2 catch-up, Aug 29 – Sep 5 (one-off) | — | 4 | 12.0 |
-| | | **Build subtotal** | **135.5** |
-| Fri 3:00–4:30pm — journal + week close-out | 1.5 h | 15 | 22.5 |
-| | | **Total** | **158.0** |
+| Sat 1:00–3:00pm — deep work | 2.0 h | 13 | 26.0 |
+| S2 catch-up remaining (Sep 1, 3, 5) | — | 3 | 8.0 |
+| | | **Build subtotal** | **105.5** |
+| Fri 3:00–4:30pm — journal + week close-out | 1.5 h | 14 | 21.0 |
+| | | **Total** | **126.5** |
 
-**Build hours and ritual hours are counted separately on purpose.** The 135.5 h figure
+**Build hours and ritual hours are counted separately on purpose.** The 105.5 h figure
 is what's available to actually build the thing; scope estimates are sized against that
-number, not against 158. The Friday block is overhead, and overhead that gets quietly
+number, not against 126.5. The Friday block is overhead, and overhead that gets quietly
 counted as capacity is how a plan overruns without anyone noticing.
 
 Thanksgiving week drops the Wed, Thu, and Sat blocks. Finals week (Dec 14–20) has none.
 
-**How this changed.** The first count on 2026-08-27 came to **71.5 h** — three blocks a
-week, 5.5 h/week, which was 24% of what the original plan assumed. BIOL 105 was then
-dropped, freeing 44 h, and the freed time was consolidated rather than scattered: the
-Saturday block went 2 h → 4 h, and the two 45-minute fragments became two 1-hour
-weekday slots.
+**How this has moved.** Three counts in five days, which is itself the point — capacity
+is now something we measure instead of assume:
+
+| Date | Build hours to Dec 13 | Weekly rate | What changed |
+| --- | --- | --- | --- |
+| 2026-08-27 (first count) | 71.5 | 5.5 h | The original "~20 h/week, ~300 h" was never measured. First real count came to 24% of it. |
+| 2026-08-27 (after replan) | 135.5 | 9.5 h | BIOL 105 dropped, freeing 44 h; consolidated into a 4 h Saturday block rather than scattered fragments. |
+| **2026-08-31 (current)** | **105.5** | **7.5 h** | Saturday cut 11am–3pm → **1–3pm** (4 h → 2 h) after the real Saturday free windows turned out to be 10–11am and 1–3pm. ~4 h of the drop is the Aug 29 catch-up block simply having passed. |
+
+**Consequence — the buffer is gone.** Trimmed scope was estimated at 105–115 h
+(ADR-0004). Available build time is now **105.5 h**. That is the bottom of the range
+with nothing spare, and it assumes no further lost weeks.
+
+**Consequence — there is no long block any more.** Saturday 1–3pm and Wednesday 6–8pm
+are both 2 h, and nothing is longer. The Saturday block was sized at 4 h specifically to
+survive a first deploy or an IAM failure without the session going to context reload.
+That property no longer exists, and S2's deploy and S4's Lambda packaging are exactly
+the work that needed it. Two hours is workable; it is not comfortable.
+
+**Known conflict:** the daily `Lunch` block (1:00–1:30pm, added 2026-08-31) overlaps the
+first 30 minutes of Saturday deep work, making the real figure 1.5 h. Either move lunch
+on Saturdays or start the block at 1:30 — but do not leave the calendar claiming 2 h it
+does not have.
 
 **The Saturday block is the one that matters.** It is the only session long enough to
 absorb a first deploy, an IAM failure, or a Lambda packaging problem without the whole
